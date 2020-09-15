@@ -8,12 +8,12 @@
     <div class="py-12">
         <form class="form-inline" method="GET">
             <div class="form-group mb-2">
-                <label for="filter" class="col-sm-2 col-form-label">Filter</label>
+
                 <input type="text" class="form-control" id="filter" name="filter" placeholder="Product name..." value="">
-                <button type="submit" class="btn btn-default mb-2">Filter</button>
+                <button type="submit" class="btn btn-default mb-2">Search</button>
             </div>
-          
         </form>
+        <div id="messages"></div>
         <table class="table table-bordered table-hover">
             <thead>
                 <th>Name</th>
@@ -47,7 +47,7 @@
                         <input hidden type="text" name="html_url" value="{{ $repo['html_url'] }}"  />
                         <input hidden type="text" name="owner" value="{{  $repo['owner']['login'] }}"  />
                         <input hidden type="text" name="description" value="{{ $repo['description'] }}"  />
-                        <input hidden type="text" name="stargazers_count" value="{{ $repo['stargazers_count'] }}"  />
+                        <input hidden type="text" name="stars" value="{{ $repo['stargazers_count'] }}"  />
                         <input hidden type="text" name="user_id" value="{{  auth()->user()->id }}"  />
                         <!-- <input type="submit" class="btn btn-elegant" value="Add to favs" > -->
                         <button class="btn btn-sm btn-danger" type="button" id="submitForm">Add to favorites</button> 
@@ -62,6 +62,7 @@
         </table>
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function(){
+
                 $('button#submitForm').on('click', function(e){
                     e.preventDefault();
                     var $this = $(this);
@@ -72,8 +73,15 @@
                         data: $($this[0].parentElement).serialize(),
                     }).done(function(response){
                         console.log(response)
-                    }).fail(function(err){
-
+                    }).fail(function(data){
+                        $('.alert').alert();
+                        var response = JSON.parse(data.responseText);
+                        var errorString = '<div class="alert alert-warning alert-dismissible fade show" role="alert">';
+                        $.each( response.errors, function( key, value) {
+                            errorString += '<li>' + value + '</li>';
+                        });
+                        errorString += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                        $("#messages").append(errorString);
                     });
                 });
             });

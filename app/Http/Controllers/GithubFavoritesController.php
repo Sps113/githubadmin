@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\GitHubRepository;
+use App\Http\Requests\Repositories as RequestRepositories;
 
 class  GithubFavoritesController extends Controller
 {
@@ -28,27 +29,21 @@ class  GithubFavoritesController extends Controller
      */
     public function create(Request $request)
     {
-        return response()->json(['message' => 'success']);
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\RequestRepositories  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(RequestRepositories $request)
     {        
-        $repository = new GitHubRepository();
-        $repository->name = $request->name;
-        $repository->description = $request->description;
-        $repository->stars = $request->stargazers_count;
-        $repository->owner = $request->owner;
-        $repository->html_url = $request->html_url; 
-        $repository->user_id = $request->user_id;
-
-        $repository->save();
-        return response()->json(['message' => 'success']);
+        if($request->validated()) {
+            GitHubRepository::create($request->all() );
+            return response()->json(['message' => 'success']);
+        } 
     }
 
     /**

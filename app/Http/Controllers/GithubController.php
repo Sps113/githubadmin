@@ -43,15 +43,6 @@ class GithubController extends Controller
 	    return view('dashboard')->with('repos', $repos)->with('filter', $filter);
 	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function add($id)
-    {
-        //
-    }
+
 
 } 
