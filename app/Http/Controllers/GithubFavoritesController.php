@@ -18,7 +18,9 @@ class  GithubFavoritesController extends Controller
      */
     public function index()
     {
-        return view('favorites.index');
+        $repositories = GitHubRepository::where('user_id', '=', auth()->user()->id)->paginate(5);
+
+        return view('favorites.index')->with('repositories', $repositories);;
     }
 
     /**
@@ -42,7 +44,7 @@ class  GithubFavoritesController extends Controller
     {        
         if($request->validated()) {
             GitHubRepository::create($request->all() );
-            return response()->json(['message' => 'success']);
+            return response()->json(['message' => 'Successful '.$request->name.' adding to favorites']);
         } 
     }
 
@@ -83,11 +85,14 @@ class  GithubFavoritesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        return view('favorites.index');
+        
+        GitHubRepository::where('user_id', $request->user_id)->where('name', $request->name)->delete();
+        return response()->json(['message' => 'Successful '.$request->name.' deleting from favorites']);
+        
     }
 }

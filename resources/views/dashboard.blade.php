@@ -6,23 +6,18 @@
     </x-slot>
 
     <div class="py-12">
-        <form class="form-inline" method="GET">
-            <div class="form-group mb-2">
-
-                <input type="text" class="form-control" id="filter" name="filter" placeholder="Product name..." value="">
-                <button type="submit" class="btn btn-default mb-2">Search</button>
-            </div>
-        </form>
+        <div class="input-group mb-3">
+            <form class="form-inline" method="GET">
+                <input type="text" class="form-control"  id="filter" name="filter" placeholder="Repositories data" aria-label="Repositories data" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary" type="button">Search</button>
+                </div>
+            </form>
+        </div> 
         <div id="messages"></div>
+
         <table class="table table-bordered table-hover">
-            <thead>
-                <th>Name</th>
-                <th>Author</th>
-                <th>Description</th>
-                <th>Stars</th>
-                <th>Actions</th>
-            </thead>
-            <tbody>
+            
             @if(empty($repos))
                 <tr>
                     <td colspan="5">No search query.</td>
@@ -32,7 +27,15 @@
                     <td colspan="5">No repositories to display.</td>
                 </tr>
             @else
-            <!-- {{ var_dump($repos) }} -->
+
+                <thead>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Description</th>
+                    <th>Stars</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
                 @foreach ($repos["items"] as $repo)
                 <tr>
                     <td><a href="{{ $repo['html_url'] }}">{{ $repo["full_name"] }}</a></td>
@@ -60,31 +63,5 @@
             @endif
             </tbody>
         </table>
-        <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function(){
-
-                $('button#submitForm').on('click', function(e){
-                    e.preventDefault();
-                    var $this = $(this);
-                    console.log( $($this[0].parentElement).attr('action'));
-                    $.ajax({
-                        url: $($this[0].parentElement).attr('action'),
-                        method: 'POST',
-                        data: $($this[0].parentElement).serialize(),
-                    }).done(function(response){
-                        console.log(response)
-                    }).fail(function(data){
-                        $('.alert').alert();
-                        var response = JSON.parse(data.responseText);
-                        var errorString = '<div class="alert alert-warning alert-dismissible fade show" role="alert">';
-                        $.each( response.errors, function( key, value) {
-                            errorString += '<li>' + value + '</li>';
-                        });
-                        errorString += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
-                        $("#messages").append(errorString);
-                    });
-                });
-            });
-        </script>
     </div>
 </x-app-layout>

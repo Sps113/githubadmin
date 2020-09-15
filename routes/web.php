@@ -24,9 +24,3 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function ()  {
     Route::post('favorites/destroy', 'App\Http\Controllers\GithubFavoritesController@destroy' );
     Route::get('favorites/index', 'App\Http\Controllers\GithubFavoritesController@index' );
 });
-
-// Route::prefix('repository')->group(function () {
-//     // Route::get('test', 'GithubController@index');
-//     Route::apiResource('index', GithubController::class);
-//     Route::apiResource('find', GithubController::class);
-// });

@@ -18,10 +18,6 @@ class GithubController extends Controller
         $this->gitHubService = $service;
     }
 
-    // public function index ():JsonResponse
-    // {
-    // 	return response()->json([]);
-    // }
 
     public function find(string $name):JsonResponse
     {
@@ -30,6 +26,9 @@ class GithubController extends Controller
         return response()->json($repo);
     }
 
+    /**
+     * @param  Illuminate\Http\Request $request
+     */
     public function index(Request $request)
 	{
 	    $filter = $request->query('filter');
@@ -37,7 +36,7 @@ class GithubController extends Controller
 	    if (!empty($filter)) {
 	        $repos = $this->gitHubService->findRepository($filter);
 	    } else {
-	        $repos = [];
+	        $repos = Null;
 	    }
 
 	    return view('dashboard')->with('repos', $repos)->with('filter', $filter);
